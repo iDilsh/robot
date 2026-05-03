@@ -292,3 +292,16 @@
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+/* ── Hydration Safety Net ──
+   Before JS hydrates, Framer Motion sets inline style="opacity:0" on elements.
+   If JS fails to hydrate, those elements stay invisible forever.
+   This rule forces them visible until React marks hydration as complete.
+   After hydration, the data-hydrated attribute is set and this rule stops applying,
+   allowing Framer Motion animations to work normally.
+*/
+html:not([data-hydrated]) [style*="opacity: 0"],
+html:not([data-hydrated]) [style*="opacity:0"] {
+  opacity: 1 !important;
+  transform: none !important;
+}

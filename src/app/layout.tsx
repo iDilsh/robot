@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import HydrationMarker from "@/components/hydration-marker";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -87,6 +88,7 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground`}
       >
+        <HydrationMarker />
         {children}
         <Toaster />
       </body>
