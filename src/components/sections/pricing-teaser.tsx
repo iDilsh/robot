@@ -15,14 +15,18 @@ export default function PricingTeaser() {
           subtitle="Flexible pricing that scales with your ambitions. No hidden fees, no surprises."
         />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-4 lg:gap-6">
-          {PRICING_TIERS.map((tier, index) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+          {PRICING_TIERS.map((tier, index) => {
+            const isProjectTier = (tier as { isProjectTier?: boolean }).isProjectTier;
+            return (
             <motion.div
               key={tier.name}
               className={`relative rounded-2xl border p-6 transition-all duration-300 ${
                 tier.popular
                   ? 'border-brand-violet bg-white shadow-[0_0_20px_rgba(124,58,237,0.12),0_10px_30px_rgba(0,0,0,0.08)] md:-mt-4 md:mb-0 md:pb-10 md:pt-10'
-                  : 'border-border/50 bg-white shadow-sm'
+                  : isProjectTier
+                    ? 'border-brand-cyan/40 bg-white shadow-[0_0_20px_rgba(6,182,212,0.10),0_10px_30px_rgba(0,0,0,0.06)]'
+                    : 'border-border/50 bg-white shadow-sm'
               }`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -38,9 +42,20 @@ export default function PricingTeaser() {
                 </div>
               )}
 
+              {/* Project Tier Badge */}
+              {isProjectTier && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center rounded-full bg-brand-cyan px-4 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-md">
+                    Per Project
+                  </span>
+                </div>
+              )}
+
               {/* Tier Name & Price */}
               <div className="text-center">
-                <h3 className="font-heading text-lg font-bold text-slate-900">
+                <h3 className={`font-heading text-lg font-bold ${
+                  isProjectTier ? 'text-brand-cyan' : 'text-slate-900'
+                }`}>
                   {tier.name}
                 </h3>
                 <div className="mt-3 flex items-baseline justify-center gap-1">
@@ -56,7 +71,9 @@ export default function PricingTeaser() {
               <div className="mt-6 space-y-3">
                 {tier.features.map((feature) => (
                   <div key={feature} className="flex items-start gap-2.5">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                    <Check className={`mt-0.5 h-4 w-4 shrink-0 ${
+                      isProjectTier ? 'text-cyan-500' : 'text-emerald-500'
+                    }`} />
                     <span className="text-sm text-slate-700">{feature}</span>
                   </div>
                 ))}
@@ -80,7 +97,8 @@ export default function PricingTeaser() {
                 </GradientButton>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         <motion.div

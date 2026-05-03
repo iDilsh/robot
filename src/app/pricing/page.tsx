@@ -178,7 +178,7 @@ function PricingToggle({
 
 function MonthlyTiers() {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-5 lg:gap-8">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
       {PRICING_TIERS.map((tier, index) => (
         <motion.div
           key={tier.name}
@@ -190,12 +190,14 @@ function MonthlyTiers() {
           className={`relative ${tier.popular ? 'md:-mt-4 md:mb-[-1rem]' : ''}`}
         >
           <GlassCard
-            hover={!tier.popular}
-            glow={tier.popular}
+            hover={!tier.popular && !(tier as { isProjectTier?: boolean }).isProjectTier}
+            glow={tier.popular || (tier as { isProjectTier?: boolean }).isProjectTier}
             className={`h-full flex flex-col ${
               tier.popular
                 ? 'border-brand-violet/30 shadow-[0_0_20px_rgba(124,58,237,0.12),0_0_40px_rgba(124,58,237,0.06)] md:py-8'
-                : ''
+                : (tier as { isProjectTier?: boolean }).isProjectTier
+                  ? 'border-brand-cyan/30 shadow-[0_0_20px_rgba(6,182,212,0.12),0_0_40px_rgba(6,182,212,0.06)]'
+                  : ''
             }`}
           >
             {/* Popular badge */}
@@ -207,10 +209,19 @@ function MonthlyTiers() {
               </div>
             )}
 
+            {/* Project tier badge */}
+            {(tier as { isProjectTier?: boolean }).isProjectTier && (
+              <div className="mb-4 flex justify-center">
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-cyan px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-md">
+                  Per Project
+                </span>
+              </div>
+            )}
+
             {/* Plan name */}
             <h3
               className={`font-heading text-xl font-bold ${
-                tier.popular ? 'text-brand-violet' : 'text-slate-900'
+                tier.popular ? 'text-brand-violet' : (tier as { isProjectTier?: boolean }).isProjectTier ? 'text-brand-cyan' : 'text-slate-900'
               }`}
             >
               {tier.name}
@@ -234,8 +245,12 @@ function MonthlyTiers() {
             <ul className="space-y-3 flex-1">
               {tier.features.map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                    <Check className="h-3 w-3 text-emerald-600" />
+                  <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                    (tier as { isProjectTier?: boolean }).isProjectTier ? 'bg-cyan-100' : 'bg-emerald-100'
+                  }`}>
+                    <Check className={`h-3 w-3 ${
+                      (tier as { isProjectTier?: boolean }).isProjectTier ? 'text-cyan-600' : 'text-emerald-600'
+                    }`} />
                   </span>
                   <span className="text-sm text-slate-700">{feature}</span>
                 </li>

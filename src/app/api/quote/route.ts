@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const GOOGLE_SHEET_URL = process.env.GOOGLE_SHEET_URL;
 const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL;
+
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 interface QuoteSubmission {
   services: string;
@@ -96,7 +99,7 @@ async function sendEmailNotification(data: QuoteSubmission) {
     </div>
   `;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'iDilsh Network <onboarding@resend.dev>',
     to: NOTIFICATION_EMAIL!,
     subject: `New Quote Request from ${data.fullName}`,

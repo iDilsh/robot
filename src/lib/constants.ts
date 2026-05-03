@@ -151,6 +151,25 @@ export const PRICING_TIERS = [
     notIncluded: [],
     popular: false,
   },
+  {
+    name: "One Creation",
+    price: "LKR 1,000+",
+    period: "/project",
+    description: "For only one project — price depends on each project",
+    features: [
+      "One Creation — Any Design",
+      "Resume, Cards, Cover Letters",
+      "Logo to All Business Designs",
+      "Social Media Posts & All Assets",
+      "Flyers, Posters & All Prints",
+      "Video Edits, Ads & More",
+      "All Animations & Motion Graphics",
+      "Simple to Pro Level Web Design",
+    ],
+    notIncluded: [],
+    popular: false,
+    isProjectTier: true,
+  },
 ];
 
 export const TEAM_MEMBERS = [
