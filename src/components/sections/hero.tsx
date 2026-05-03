@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Play, Globe } from 'lucide-react';
+import { ChevronDown, Play, Globe, X } from 'lucide-react';
 import GradientButton from '@/components/ui-extensions/gradient-button';
 
 const typingPhrases = [
@@ -14,6 +14,7 @@ const typingPhrases = [
 
 export default function Hero() {
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,6 +22,23 @@ export default function Hero() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Lock body scroll & handle Escape key when video modal is open
+  useEffect(() => {
+    if (showVideo) {
+      document.body.style.overflow = 'hidden';
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setShowVideo(false);
+      };
+      window.addEventListener('keydown', handleEscape);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleEscape);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [showVideo]);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white">
@@ -292,7 +310,7 @@ export default function Hero() {
           <GradientButton href="/quote" variant="primary" size="lg">
             Start Your Project
           </GradientButton>
-          <GradientButton href="#portfolio" variant="outline" size="lg" icon={<Play className="h-4 w-4" />}>
+          <GradientButton onClick={() => setShowVideo(true)} variant="outline" size="lg" icon={<Play className="h-4 w-4" />}>
             Watch Our Reel
           </GradientButton>
         </motion.div>
@@ -307,6 +325,58 @@ export default function Hero() {
           Graphic Design &bull; Video Editing &bull; AI Creations &bull; Web Design &bull; Social Media
         </motion.p>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {showVideo && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              onClick={() => setShowVideo(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+
+            {/* Video Container */}
+            <motion.div
+              className="relative z-10 w-full max-w-4xl overflow-hidden rounded-2xl bg-black shadow-2xl shadow-brand-violet/20"
+              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowVideo(false)}
+                className="absolute -top-1 -right-1 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all duration-200 hover:bg-white/25 hover:scale-110 sm:top-3 sm:right-3 sm:h-9 sm:w-9"
+                aria-label="Close video"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Aspect ratio container */}
+              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                <iframe
+                  src="https://www.youtube.com/embed/OhmU-ez7yFU?autoplay=1&rel=0&modestbranding=1"
+                  title="iDilsh Network Showreel"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Scroll indicator */}
       <motion.div
