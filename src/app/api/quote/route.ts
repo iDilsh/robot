@@ -106,13 +106,25 @@ async function sendEmailNotification(data: QuoteSubmission) {
 
 /* ── Save to Google Sheets ── */
 async function saveToGoogleSheets(data: QuoteSubmission) {
-  if (!GOOGLE_SHEET_URL) return;
+  if (!GOOGLE_SHEET_URL) {
+    console.warn('GOOGLE_SHEET_URL not configured — skipping Google Sheets save');
+    return;
+  }
 
-  await fetch(GOOGLE_SHEET_URL, {
+  const response = await fetch(GOOGLE_SHEET_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(data),
   });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    console.error(`Google Sheets returned ${response.status}: ${responseText}`);
+    throw new Error(`Google Sheets error: ${response.status}`);
+  }
+
+  const result = await response.text();
+  console.log('Google Sheets response:', result);
 }
 
 /* ── API Route Handler ── */
