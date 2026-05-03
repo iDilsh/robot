@@ -138,10 +138,10 @@ export async function POST(request: NextRequest) {
     const emailFailed = results[0].status === 'rejected';
     const sheetsFailed = results[1].status === 'rejected';
 
-    if (emailFailed) {
+    if (emailFailed && results[0].status === 'rejected') {
       console.error('Email failed:', results[0].reason);
     }
-    if (sheetsFailed) {
+    if (sheetsFailed && results[1].status === 'rejected') {
       console.error('Google Sheets failed:', results[1].reason);
     }
 

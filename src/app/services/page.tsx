@@ -79,12 +79,12 @@ const SERVICE_CARDS = [
     features: ['Content Strategy & Planning', 'Post Creation & Scheduling', 'Community Management', 'Analytics & Reporting', 'Paid Campaign Management'],
   },
   {
-    slug: 'guides',
-    title: 'Free Guides',
+    slug: 'other',
+    title: 'Other',
     icon: 'BookOpen',
     description:
-      'Access expert resources, tutorials, and guides designed to help you navigate the digital landscape. Knowledge is power, and we believe in sharing ours to help your brand thrive independently.',
-    features: ['Brand Strategy Guides', 'Social Media Playbooks', 'Design Tutorials', 'Marketing Checklists', 'Industry Reports'],
+      'Have a unique request or need something different? We can help with that too. From custom solutions to niche requirements, we bring the same dedication and creativity.',
+    features: ['Custom Solutions', 'Niche Requirements', 'Consulting & Advisory', 'Bespoke Design', 'Specialized Projects'],
   },
 ];
 

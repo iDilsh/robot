@@ -72,7 +72,7 @@ const portfolioCategoryMap: Record<string, string[]> = {
   'ai-creations': ['AI Creations'],
   'web-design': ['Web'],
   'social-media': ['Social Media'],
-  'guides': [],
+  'other': [],
 };
 
 const SERVICE_DETAILS: Record<string, ServiceDetail> = {
@@ -191,27 +191,27 @@ const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       { q: 'How do you measure success?', a: 'We track key metrics including reach, engagement rate, follower growth, and website clicks. You\'ll receive regular reports with actionable insights.' },
     ],
   },
-  'guides': {
-    heroDescription: 'Access expert resources, tutorials, and guides designed to help you navigate the digital landscape and grow your brand.',
+  'other': {
+    heroDescription: 'Have a unique request or need something different? We bring the same dedication and creativity to every project, no matter how niche or custom.',
     features: [
-      { title: 'Brand Strategy Guides', desc: 'Comprehensive guides to help you define, build, and evolve a powerful brand identity from the ground up.' },
-      { title: 'Social Media Playbooks', desc: 'Step-by-step playbooks for mastering each social media platform and growing your organic presence.' },
-      { title: 'Design Tutorials', desc: 'Practical design tutorials for beginners and intermediate creators looking to improve their visual content skills.' },
-      { title: 'Marketing Checklists', desc: 'Actionable checklists that ensure you never miss a step in your marketing campaigns and launches.' },
-      { title: 'Industry Reports', desc: 'Curated insights and trend reports to keep you informed about the latest developments in digital marketing.' },
+      { title: 'Custom Solutions', desc: 'Tailored digital solutions designed specifically for your unique business needs and goals.' },
+      { title: 'Niche Requirements', desc: 'Specialized services for industries and projects that fall outside traditional categories.' },
+      { title: 'Consulting & Advisory', desc: 'Expert guidance and strategic advice to help you navigate complex digital challenges.' },
+      { title: 'Bespoke Design', desc: 'One-of-a-kind design work crafted to meet your exact specifications and vision.' },
+      { title: 'Specialized Projects', desc: 'From packaging design to event branding, we handle projects of all types with excellence.' },
     ],
     process: [
-      { step: 1, title: 'Browse & Select', desc: 'Explore our library of free guides and select the resources most relevant to your needs.' },
-      { step: 2, title: 'Download & Learn', desc: 'Download your chosen guides and learn at your own pace with our structured, easy-to-follow content.' },
-      { step: 3, title: 'Implement & Grow', desc: 'Apply the strategies and techniques to your brand and watch your digital presence grow.' },
-      { step: 4, title: 'Get Expert Help', desc: 'Need personalized guidance? Our team is ready to help you implement these strategies with professional support.' },
+      { step: 1, title: 'Discovery Call', desc: 'We start with a conversation to understand your unique needs and vision.' },
+      { step: 2, title: 'Custom Proposal', desc: 'We craft a tailored proposal outlining scope, timeline, and investment for your project.' },
+      { step: 3, title: 'Execution', desc: 'Our team brings your vision to life with the same quality and creativity we bring to every project.' },
+      { step: 4, title: 'Delivery & Support', desc: 'We deliver polished results and provide ongoing support to ensure your success.' },
     ],
-    startingPrice: 'Free',
+    startingPrice: 'Custom',
     faqs: [
-      { q: 'Are the guides really free?', a: 'Yes! All our guides are completely free to download and use. We believe in sharing knowledge to help businesses of all sizes succeed.' },
-      { q: 'How often are new guides published?', a: 'We publish new guides and resources monthly, covering the latest trends and strategies in digital marketing and design.' },
-      { q: 'Can I share these guides with my team?', a: 'Absolutely! We encourage you to share our guides with your team. The more people who benefit, the better.' },
-      { q: 'Do you offer personalized consultations?', a: 'Yes, if you need help implementing the strategies in our guides, we offer free initial consultations. Book one through our Contact page.' },
+      { q: 'What types of custom projects do you handle?', a: 'We handle a wide range of custom projects including packaging design, event branding, presentation design, pitch deck creation, and much more. If you can dream it, we can probably design it.' },
+      { q: 'How do you price custom projects?', a: 'Custom projects are priced based on scope, complexity, and timeline. We provide a detailed quote after our discovery call so you know exactly what to expect — no surprises.' },
+      { q: 'Can you combine multiple services?', a: 'Absolutely! Many of our clients need a combination of services. We can create a bundled package that covers all your needs at a competitive price.' },
+      { q: 'How long do custom projects take?', a: 'Timelines vary based on the project, but we always provide a clear timeline upfront. Most custom projects are completed within 1-4 weeks.' },
     ],
   },
 };

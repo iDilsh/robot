@@ -42,12 +42,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-brand-violet: var(--brand-violet);
-  --color-brand-cyan: var(--brand-cyan);
-  --color-brand-gold: var(--brand-gold);
-  --color-brand-violet-light: var(--brand-violet-light);
-  --color-brand-cyan-light: var(--brand-cyan-light);
-  --color-brand-gold-light: var(--brand-gold-light);
+  --color-brand-violet: #7C3AED;
+  --color-brand-cyan: #06B6D4;
+  --color-brand-gold: #F59E0B;
+  --color-brand-violet-light: #EDE9FE;
+  --color-brand-cyan-light: #CFFAFE;
+  --color-brand-gold-light: #FEF3C7;
 }
 
 :root {
@@ -61,7 +61,7 @@
   --brand-cyan-light: #CFFAFE;
   --brand-gold-light: #FEF3C7;
 
-  /* Light Theme - Primary violet accent */
+  /* Light Theme */
   --background: #ffffff;
   --foreground: #1e293b;
 
@@ -163,7 +163,6 @@
 
 /* Custom Utility Classes */
 @layer utilities {
-  /* Glass Card - white glass effect for light theme */
   .glass-card {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
@@ -182,7 +181,6 @@
       0 4px 6px -4px rgba(0, 0, 0, 0.04);
   }
 
-  /* Gradient Text - violet to cyan */
   .gradient-text {
     background: linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%);
     -webkit-background-clip: text;
@@ -190,7 +188,6 @@
     background-clip: text;
   }
 
-  /* Glow Border - subtle violet glow */
   .glow-border {
     border: 1px solid rgba(124, 58, 237, 0.2);
     box-shadow:
@@ -205,7 +202,6 @@
       0 0 40px rgba(124, 58, 237, 0.08);
   }
 
-  /* Magnetic Button - CSS only base effect */
   .magnetic-btn {
     position: relative;
     transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -227,7 +223,6 @@
       0 2px 4px rgba(124, 58, 237, 0.1);
   }
 
-  /* Highlight Pill - gradient background behind text */
   .highlight-pill {
     position: relative;
     display: inline-block;
@@ -293,13 +288,7 @@
   animation: marquee 30s linear infinite;
 }
 
-/* ── Hydration Safety Net ──
-   Before JS hydrates, Framer Motion sets inline style="opacity:0" on elements.
-   If JS fails to hydrate, those elements stay invisible forever.
-   This rule forces them visible until React marks hydration as complete.
-   After hydration, the data-hydrated attribute is set and this rule stops applying,
-   allowing Framer Motion animations to work normally.
-*/
+/* Hydration Safety Net */
 html:not([data-hydrated]) [style*="opacity: 0"],
 html:not([data-hydrated]) [style*="opacity:0"] {
   opacity: 1 !important;
