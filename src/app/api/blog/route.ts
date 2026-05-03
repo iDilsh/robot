@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
       featured: body.featured || false,
       published: body.published || false,
       keywords: body.keywords || [],
+      featuredImage: body.featuredImage || '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

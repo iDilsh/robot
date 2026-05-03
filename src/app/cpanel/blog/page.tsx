@@ -27,6 +27,7 @@ interface BlogPost {
   featured: boolean;
   published: boolean;
   keywords: string[];
+  featuredImage: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -476,15 +476,18 @@ function PostHero({
   date,
   readTime,
   slug,
+  featuredImage,
 }: {
   title: string;
   category: string;
   date: string;
   readTime: string;
   slug: string;
+  featuredImage?: string;
 }) {
   const gradient = POST_GRADIENTS[slug] || 'from-violet-500 to-purple-600';
   const colorClass = CATEGORY_COLORS[category] || 'bg-slate-100 text-slate-700';
+  const hasFeaturedImage = featuredImage && featuredImage.trim() !== '';
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-brand-violet-light/60 via-brand-violet-light/20 to-white pt-28 pb-16 md:pt-36 md:pb-20">
@@ -517,22 +520,35 @@ function PostHero({
           </ol>
         </nav>
 
-        {/* Large gradient hero image */}
+        {/* Hero image */}
         <motion.div
-          className={cn('relative aspect-[2/1] sm:aspect-[3/1] w-full rounded-2xl bg-gradient-to-br', gradient)}
+          className={cn(
+            'relative aspect-[2/1] sm:aspect-[3/1] w-full rounded-2xl overflow-hidden',
+            hasFeaturedImage ? '' : 'bg-gradient-to-br ' + gradient
+          )}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          {/* Decorative shapes */}
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/10 blur-sm" />
-            <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/8 blur-sm" />
-            <div className="absolute right-1/4 top-1/3 h-20 w-20 rounded-full bg-white/5" />
-          </div>
-          <div className="flex h-full items-center justify-center">
-            <Bookmark className="h-16 w-16 text-white/40 sm:h-24 sm:w-24" />
-          </div>
+          {hasFeaturedImage ? (
+            <img
+              src={featuredImage}
+              alt={title}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <>
+              {/* Decorative shapes */}
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/10 blur-sm" />
+                <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/8 blur-sm" />
+                <div className="absolute right-1/4 top-1/3 h-20 w-20 rounded-full bg-white/5" />
+              </div>
+              <div className="flex h-full items-center justify-center">
+                <Bookmark className="h-16 w-16 text-white/40 sm:h-24 sm:w-24" />
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* Category tag */}
@@ -932,6 +948,7 @@ export default function BlogPostClient({ params }: { params: Promise<{ slug: str
         date={post.date}
         readTime={post.readTime}
         slug={post.slug}
+        featuredImage={(post as any).featuredImage}
       />
       <ArticleBody slug={post.slug} content={(post as any).content} />
       <TagsSection slug={post.slug} keywords={(post as any).keywords} />

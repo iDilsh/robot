@@ -147,6 +147,7 @@ function ProjectCard({
   index: number;
 }) {
   const gradient = PROJECT_GRADIENTS[project.id] || 'from-violet-500 to-purple-600';
+  const hasImage = project.imageUrl && project.imageUrl.trim() !== '';
 
   return (
     <motion.div
@@ -161,34 +162,55 @@ function ProjectCard({
       }}
       className="group relative overflow-hidden rounded-2xl"
     >
-      {/* Gradient Background */}
       <div
         className={cn(
-          'relative aspect-[4/3] w-full bg-gradient-to-br',
-          gradient
+          'relative aspect-[4/3] w-full',
+          hasImage ? '' : 'bg-gradient-to-br ' + gradient
         )}
       >
-        {/* Decorative shapes */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-sm" />
-          <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-white/8 blur-sm" />
-          <div className="absolute right-1/4 top-1/3 h-16 w-16 rounded-full bg-white/5" />
-        </div>
+        {/* Uploaded Image */}
+        {hasImage && (
+          <img
+            src={project.imageUrl}
+            alt={project.title}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
 
-        {/* Content */}
+        {/* Decorative shapes (only for gradient fallback) */}
+        {!hasImage && (
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-sm" />
+            <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-white/8 blur-sm" />
+            <div className="absolute right-1/4 top-1/3 h-16 w-16 rounded-full bg-white/5" />
+          </div>
+        )}
+
+        {/* Content overlay */}
         <div className="relative z-10 flex h-full flex-col justify-end p-6">
           {/* Category Badge */}
-          <span className="mb-auto inline-flex self-start rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+          <span className={cn(
+            'mb-auto inline-flex self-start rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm',
+            hasImage ? 'bg-black/40 text-white' : 'bg-white/20 text-white'
+          )}>
             {project.category}
           </span>
 
           {/* Project Name */}
-          <h3 className="font-heading text-xl font-bold text-white sm:text-2xl">
+          <h3 className={cn(
+            'font-heading text-xl font-bold sm:text-2xl',
+            hasImage ? 'text-white drop-shadow-lg' : 'text-white'
+          )}>
             {project.title}
           </h3>
 
           {/* Client Name */}
-          <p className="mt-1 text-sm text-white/80">{project.client}</p>
+          <p className={cn(
+            'mt-1 text-sm',
+            hasImage ? 'text-white/90 drop-shadow' : 'text-white/80'
+          )}>
+            {project.client}
+          </p>
         </div>
 
         {/* Hover Overlay */}
@@ -210,12 +232,14 @@ function ProjectCard({
           </motion.div>
         </motion.div>
 
-        {/* Hover Scale */}
-        <motion.div
-          className="absolute inset-0"
-          whileHover={{ scale: 1.03 }}
-          transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-        />
+        {/* Hover Scale (only for gradient cards) */}
+        {!hasImage && (
+          <motion.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
+        )}
       </div>
     </motion.div>
   );

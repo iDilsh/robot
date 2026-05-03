@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Loader2, X, Save } from 'lucide-react';
+import { ArrowLeft, Loader2, X, Save, Upload } from 'lucide-react';
 
 const CATEGORIES = ['Branding', 'Marketing', 'AI', 'Design', 'Video', 'Web Design'];
 
@@ -33,6 +33,8 @@ export default function CpanelBlogNewPage() {
   const [keywords, setKeywords] = useState<string[]>([]);
   const [featured, setFeatured] = useState(false);
   const [published, setPublished] = useState(false);
+  const [featuredImage, setFeaturedImage] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -76,6 +78,35 @@ export default function CpanelBlogNewPage() {
     setKeywords(keywords.filter((k) => k !== kw));
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setFeaturedImage(data.url);
+        showToast('Featured image uploaded successfully');
+      } else {
+        const data = await res.json();
+        showToast(data.error || 'Upload failed', 'error');
+      }
+    } catch {
+      showToast('Upload failed', 'error');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = async (publish: boolean) => {
     if (!title.trim()) {
       showToast('Title is required', 'error');
@@ -97,6 +128,7 @@ export default function CpanelBlogNewPage() {
           date,
           keywords,
           featured,
+          featuredImage,
           published: publish,
         }),
       });
@@ -203,6 +235,85 @@ export default function CpanelBlogNewPage() {
               rows={12}
               className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] outline-none transition w-full resize-y font-mono"
             />
+          </div>
+
+          {/* Featured Image Upload */}
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Featured Image</label>
+
+            {/* Image Preview */}
+            {featuredImage && (
+              <div className="mb-4 relative overflow-hidden rounded-lg border border-slate-200">
+                <img
+                  src={featuredImage}
+                  alt="Featured image preview"
+                  className="h-48 w-full object-cover"
+                />
+                <button
+                  onClick={() => setFeaturedImage('')}
+                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70 cursor-pointer"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Upload area */}
+            {!featuredImage && (
+              <label className="mb-3 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 py-8 transition-colors hover:border-[#7C3AED] hover:bg-[#7C3AED]/5">
+                <Upload className="h-8 w-8 text-slate-400" />
+                <span className="mt-2 text-sm font-medium text-slate-600">
+                  {uploading ? 'Uploading...' : 'Click to upload featured image'}
+                </span>
+                <span className="mt-1 text-xs text-slate-400">
+                  PNG, JPG, WEBP up to 5MB
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+              </label>
+            )}
+
+            {/* Or enter URL manually */}
+            <div className="mt-3">
+              <label className="mb-1 block text-xs font-medium text-slate-500">
+                Or enter image URL manually
+              </label>
+              <input
+                type="text"
+                value={featuredImage}
+                onChange={(e) => setFeaturedImage(e.target.value)}
+                placeholder="https://example.com/image.png"
+                className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] outline-none transition w-full"
+              />
+            </div>
+
+            {/* Change image button (when image already set) */}
+            {featuredImage && (
+              <div className="mt-3">
+                <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50">
+                  <Upload className="h-4 w-4" />
+                  Change Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                </label>
+                {uploading && (
+                  <span className="ml-3 inline-flex items-center gap-1.5 text-xs text-slate-500">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    Uploading...
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

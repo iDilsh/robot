@@ -11,6 +11,7 @@
     "featured": true,
     "published": true,
     "keywords": ["branding", "business mistakes", "brand identity", "logo design", "small business"],
+    "featuredImage": "",
     "createdAt": "2026-04-28T10:00:00.000Z",
     "updatedAt": "2026-04-28T10:00:00.000Z"
   },
@@ -26,6 +27,7 @@
     "featured": false,
     "published": true,
     "keywords": ["social media", "marketing", "content strategy", "digital marketing", "2026"],
+    "featuredImage": "",
     "createdAt": "2026-04-20T10:00:00.000Z",
     "updatedAt": "2026-04-20T10:00:00.000Z"
   },
@@ -41,6 +43,7 @@
     "featured": false,
     "published": true,
     "keywords": ["AI", "graphic design", "artificial intelligence", "design tools", "automation"],
+    "featuredImage": "",
     "createdAt": "2026-04-15T10:00:00.000Z",
     "updatedAt": "2026-04-15T10:00:00.000Z"
   },
@@ -56,6 +59,7 @@
     "featured": false,
     "published": true,
     "keywords": ["logo design", "designer", "branding", "hiring", "red flags"],
+    "featuredImage": "",
     "createdAt": "2026-04-10T10:00:00.000Z",
     "updatedAt": "2026-04-10T10:00:00.000Z"
   },
@@ -71,6 +75,7 @@
     "featured": false,
     "published": true,
     "keywords": ["video marketing", "statistics", "social media video", "content marketing"],
+    "featuredImage": "",
     "createdAt": "2026-04-05T10:00:00.000Z",
     "updatedAt": "2026-04-05T10:00:00.000Z"
   },
@@ -86,6 +91,7 @@
     "featured": false,
     "published": true,
     "keywords": ["website", "small business", "web design", "online presence", "digital strategy"],
+    "featuredImage": "",
     "createdAt": "2026-03-28T10:00:00.000Z",
     "updatedAt": "2026-03-28T10:00:00.000Z"
   }

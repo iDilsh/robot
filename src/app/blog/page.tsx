@@ -31,6 +31,7 @@ interface BlogPost {
   featured: boolean;
   published: boolean;
   keywords: string[];
+  featuredImage: string;
 }
 
 const CATEGORIES = [
@@ -136,6 +137,7 @@ function FeaturedPost({ posts }: { posts: BlogPost[] }) {
   if (!featured) return null;
 
   const colorClass = CATEGORY_COLORS[featured.category] || 'bg-slate-100 text-slate-700';
+  const hasFeaturedImage = featured.featuredImage && featured.featuredImage.trim() !== '';
 
   return (
     <section className="py-12 md:py-16">
@@ -150,32 +152,62 @@ function FeaturedPost({ posts }: { posts: BlogPost[] }) {
             href={`/blog/${featured.slug}`}
             className="group block overflow-hidden rounded-2xl"
           >
-            {/* Large gradient banner */}
-            <div className="relative bg-gradient-to-br from-violet-600 via-brand-violet to-cyan-500">
-              {/* Decorative shapes */}
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-sm" />
-                <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-white/8 blur-sm" />
-                <div className="absolute right-1/3 top-1/4 h-32 w-32 rounded-full bg-white/5" />
-              </div>
+            {/* Large banner */}
+            <div className={cn(
+              'relative',
+              hasFeaturedImage ? '' : 'bg-gradient-to-br from-violet-600 via-brand-violet to-cyan-500'
+            )}>
+              {hasFeaturedImage && (
+                <img
+                  src={featured.featuredImage}
+                  alt={featured.title}
+                  className="w-full aspect-[2/1] sm:aspect-[3/1] object-cover"
+                />
+              )}
 
-              <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 md:gap-8">
-                {/* Image placeholder */}
-                <div className="flex items-center justify-center p-10 md:p-12">
-                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm sm:h-32 sm:w-32">
-                    <Bookmark className="h-12 w-12 text-white sm:h-16 sm:w-16" />
+              {/* Decorative shapes (only when no image) */}
+              {!hasFeaturedImage && (
+                <>
+                  <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-sm" />
+                    <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-white/8 blur-sm" />
+                    <div className="absolute right-1/3 top-1/4 h-32 w-32 rounded-full bg-white/5" />
                   </div>
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">
+                    <div className="flex items-center justify-center p-10 md:p-12">
+                      <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm sm:h-32 sm:w-32">
+                        <Bookmark className="h-12 w-12 text-white sm:h-16 sm:w-16" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center p-6 pb-10 md:p-10 md:pb-10">
+                      <span className={cn('inline-flex self-start rounded-full px-3 py-1 text-xs font-semibold', 'bg-white/20 text-white backdrop-blur-sm')}>
+                        {featured.category}
+                      </span>
+                      <h2 className="mt-4 font-heading text-2xl font-bold text-white sm:text-3xl lg:text-4xl group-hover:underline decoration-white/40 underline-offset-4">
+                        {featured.title}
+                      </h2>
+                      <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base sm:leading-relaxed line-clamp-3">
+                        {featured.excerpt}
+                      </p>
+                      <div className="mt-6 flex items-center gap-1.5 text-sm font-medium text-white transition-colors group-hover:text-cyan-200">
+                        Read Full Article
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
 
-                {/* Content */}
-                <div className="flex flex-col justify-center p-6 pb-10 md:p-10 md:pb-10">
-                  <span className={cn('inline-flex self-start rounded-full px-3 py-1 text-xs font-semibold', 'bg-white/20 text-white backdrop-blur-sm')}>
+              {/* Content overlay when there IS an image */}
+              {hasFeaturedImage && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-10">
+                  <span className={cn('inline-flex self-start rounded-full px-3 py-1 text-xs font-semibold mb-4', 'bg-white/20 text-white backdrop-blur-sm')}>
                     {featured.category}
                   </span>
-                  <h2 className="mt-4 font-heading text-2xl font-bold text-white sm:text-3xl lg:text-4xl group-hover:underline decoration-white/40 underline-offset-4">
+                  <h2 className="font-heading text-2xl font-bold text-white sm:text-3xl lg:text-4xl group-hover:underline decoration-white/40 underline-offset-4 drop-shadow-lg">
                     {featured.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base sm:leading-relaxed line-clamp-3">
+                  <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base sm:leading-relaxed line-clamp-2 drop-shadow">
                     {featured.excerpt}
                   </p>
                   <div className="mt-6 flex items-center gap-1.5 text-sm font-medium text-white transition-colors group-hover:text-cyan-200">
@@ -183,7 +215,7 @@ function FeaturedPost({ posts }: { posts: BlogPost[] }) {
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </Link>
         </motion.div>
@@ -234,6 +266,7 @@ function PostCard({
 }) {
   const gradient = POST_GRADIENTS[post.slug] || 'from-violet-500 to-purple-600';
   const colorClass = CATEGORY_COLORS[post.category] || 'bg-slate-100 text-slate-700';
+  const hasFeaturedImage = post.featuredImage && post.featuredImage.trim() !== '';
 
   return (
     <motion.div
@@ -250,18 +283,32 @@ function PostCard({
     >
       <Link href={`/blog/${post.slug}`} className="block h-full">
         <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/50 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:border-brand-violet/20">
-          {/* Gradient thumbnail */}
-          <div className={cn('relative aspect-[16/10] w-full bg-gradient-to-br', gradient)}>
-            {/* Decorative shapes */}
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-sm" />
-              <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/8 blur-sm" />
+          {/* Thumbnail */}
+          {hasFeaturedImage ? (
+            <div className="relative aspect-[16/10] w-full overflow-hidden">
+              <img
+                src={post.featuredImage}
+                alt={post.title}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {/* Category tag on image */}
+              <span className={cn('absolute left-4 top-4 rounded-full px-2.5 py-0.5 text-xs font-semibold', colorClass)}>
+                {post.category}
+              </span>
             </div>
-            {/* Category tag on image */}
-            <span className={cn('absolute left-4 top-4 rounded-full px-2.5 py-0.5 text-xs font-semibold', colorClass)}>
-              {post.category}
-            </span>
-          </div>
+          ) : (
+            <div className={cn('relative aspect-[16/10] w-full bg-gradient-to-br', gradient)}>
+              {/* Decorative shapes */}
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-sm" />
+                <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/8 blur-sm" />
+              </div>
+              {/* Category tag on image */}
+              <span className={cn('absolute left-4 top-4 rounded-full px-2.5 py-0.5 text-xs font-semibold', colorClass)}>
+                {post.category}
+              </span>
+            </div>
+          )}
 
           {/* Content */}
           <div className="flex flex-1 flex-col p-5 sm:p-6">
