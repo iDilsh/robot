@@ -83,7 +83,14 @@ export default function Navbar() {
       >
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-1 shrink-0">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <img
+              src="/logo.svg"
+              alt="iDilsh Network"
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded-lg"
+            />
             <span className="font-heading text-xl font-bold text-brand-violet">
               iDilsh
             </span>
@@ -228,7 +235,14 @@ export default function Navbar() {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent side="right" className="w-full sm:max-w-md">
           <SheetHeader>
-            <SheetTitle className="flex items-center gap-1">
+            <SheetTitle className="flex items-center gap-2">
+              <img
+                src="/logo.svg"
+                alt="iDilsh Network"
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-md"
+              />
               <span className="font-heading text-lg font-bold text-brand-violet">
                 iDilsh
               </span>

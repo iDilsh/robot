@@ -54,7 +54,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Column 1: Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-1">
+            <Link href="/" className="inline-flex items-center gap-2">
+              <img
+                src="/logo.svg"
+                alt="iDilsh Network"
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-md"
+              />
               <span className="font-heading text-xl font-bold text-brand-violet">
                 iDilsh
               </span>
