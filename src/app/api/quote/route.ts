@@ -111,20 +111,54 @@ async function saveToGoogleSheets(data: QuoteSubmission) {
     return;
   }
 
-  const response = await fetch(GOOGLE_SHEET_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(data),
-  });
+  try {
+    // Google Apps Script Web Apps require a special approach:
+    // Google returns a 302 redirect on POST, which we need to follow manually
+    // because Node.js fetch() doesn't forward the body to the redirect URL.
 
-  if (!response.ok) {
-    const responseText = await response.text();
-    console.error(`Google Sheets returned ${response.status}: ${responseText}`);
-    throw new Error(`Google Sheets error: ${response.status}`);
+    // Step 1: Send POST — Google will return a 302 redirect
+    const postResponse = await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(data),
+      redirect: 'manual', // Don't auto-follow the redirect
+    });
+
+    // Step 2: If we get a redirect, follow it with GET
+    if (postResponse.status === 302 || postResponse.status === 301) {
+      const redirectUrl = postResponse.headers.get('location');
+      if (redirectUrl) {
+        const finalResponse = await fetch(redirectUrl, {
+          method: 'GET',
+          redirect: 'follow',
+        });
+        const result = await finalResponse.text();
+        console.log('Google Sheets response (via redirect):', result);
+        return;
+      }
+    }
+
+    // Step 3: If no redirect, check the direct response
+    if (postResponse.ok) {
+      const result = await postResponse.text();
+      console.log('Google Sheets response (direct):', result);
+      return;
+    }
+
+    // Fallback: Try GET with query parameters as alternative method
+    console.log('POST method did not work, trying GET with query params...');
+    const queryString = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+    const getResponse = await fetch(`${GOOGLE_SHEET_URL}?${queryString}`, {
+      method: 'GET',
+      redirect: 'follow',
+    });
+    const getResult = await getResponse.text();
+    console.log('Google Sheets response (via GET):', getResult);
+
+  } catch (error) {
+    console.error('Google Sheets save error:', error);
+    throw error;
   }
-
-  const result = await response.text();
-  console.log('Google Sheets response:', result);
 }
 
 /* ── API Route Handler ── */
