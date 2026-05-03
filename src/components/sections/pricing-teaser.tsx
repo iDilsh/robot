@@ -62,8 +62,8 @@ export default function PricingTeaser() {
                 ))}
                 {tier.notIncluded.map((feature) => (
                   <div key={feature} className="flex items-start gap-2.5">
-                    <X className="mt-0.5 h-4 w-4 shrink-0 text-slate-300" />
-                    <span className="text-sm text-muted-foreground/60">{feature}</span>
+                    <X className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                    <span className="text-sm text-muted-foreground/70">{feature}</span>
                   </div>
                 ))}
               </div>

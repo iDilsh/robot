@@ -9,11 +9,11 @@ import GradientButton from '@/components/ui-extensions/gradient-button';
 const featuredProjects = PORTFOLIO_PROJECTS.slice(0, 6);
 
 const categoryColors: Record<string, string> = {
-  Branding: 'bg-brand-violet/10 text-brand-violet',
-  Video: 'bg-brand-cyan/10 text-brand-cyan',
-  Web: 'bg-emerald-500/10 text-emerald-600',
-  'Social Media': 'bg-amber-500/10 text-amber-600',
-  'AI Creations': 'bg-pink-500/10 text-pink-600',
+  Branding: 'bg-white/20 text-white',
+  Video: 'bg-white/20 text-white',
+  Web: 'bg-white/20 text-white',
+  'Social Media': 'bg-white/20 text-white',
+  'AI Creations': 'bg-white/20 text-white',
 };
 
 export default function PortfolioPreview() {
@@ -44,7 +44,7 @@ export default function PortfolioPreview() {
               <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent p-6 transition-all duration-300 group-hover:from-black/75 group-hover:via-black/30">
                 {/* Category badge */}
                 <span
-                  className={`mb-3 inline-block w-fit rounded-full px-3 py-1 text-xs font-medium ${categoryColors[project.category] || 'bg-slate-500/10 text-slate-600'}`}
+                  className={`mb-3 inline-block w-fit rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm ${categoryColors[project.category] || 'bg-white/20 text-white'}`}
                 >
                   {project.category}
                 </span>

@@ -216,7 +216,7 @@ export default function Footer() {
             >
               Privacy Policy
             </Link>
-            <span className="text-xs text-border">|</span>
+            <span className="text-xs text-slate-400">|</span>
             <Link
               href="/terms"
               className="text-xs text-muted-foreground transition-colors duration-200 hover:text-brand-violet"

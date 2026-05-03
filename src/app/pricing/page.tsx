@@ -243,9 +243,9 @@ function MonthlyTiers() {
               {tier.notIncluded.map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100">
-                    <X className="h-3 w-3 text-slate-400" />
+                    <X className="h-3 w-3 text-slate-500" />
                   </span>
-                  <span className="text-sm text-muted-foreground/60 line-through">{feature}</span>
+                  <span className="text-sm text-muted-foreground/70 line-through">{feature}</span>
                 </li>
               ))}
             </ul>

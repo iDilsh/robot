@@ -176,7 +176,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
                     ? 'border-brand-violet bg-brand-violet text-white'
                     : currentStep === step.id
                     ? 'border-brand-violet bg-white text-brand-violet shadow-[0_0_0_4px_rgba(124,58,237,0.15)]'
-                    : 'border-slate-200 bg-white text-slate-400'
+                    : 'border-slate-200 bg-white text-slate-500'
                 }`}
               >
                 {currentStep > step.id ? (
@@ -187,7 +187,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
               </div>
               <span
                 className={`mt-2 text-xs font-medium transition-colors duration-300 ${
-                  currentStep >= step.id ? 'text-brand-violet' : 'text-slate-400'
+                  currentStep >= step.id ? 'text-brand-violet' : 'text-slate-500'
                 }`}
               >
                 {step.label}
@@ -779,7 +779,7 @@ export default function QuotePage() {
                     ? 'bg-gradient-to-r from-brand-violet to-[#6D28D9] text-white/80 cursor-wait'
                     : canProceed()
                     ? 'bg-gradient-to-r from-brand-violet to-[#6D28D9] text-white hover:from-[#8B5CF6] hover:to-brand-violet hover:scale-[1.03] hover:shadow-[0_10px_25px_rgba(124,58,237,0.25),0_4px_10px_rgba(124,58,237,0.15)] active:scale-[1.01] cursor-pointer'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'bg-slate-100 text-slate-500 cursor-not-allowed'
                 }`}
               >
                 {isSubmitting ? (
