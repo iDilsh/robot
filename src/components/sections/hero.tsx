@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Play, Globe } from 'lucide-react';
 import GradientButton from '@/components/ui-extensions/gradient-button';
@@ -227,6 +228,25 @@ export default function Hero() {
 
       {/* Main content */}
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        {/* Hero logo */}
+        <motion.div
+          className="mx-auto mb-8"
+          initial={{ opacity: 0, scale: 0.8, y: -20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <div className="mx-auto inline-block overflow-hidden rounded-2xl border border-brand-violet/20 bg-white/60 p-1.5 shadow-lg shadow-brand-violet/10 backdrop-blur-sm">
+            <Image
+              src="/hero-logo.png"
+              alt="iDilsh Network Logo"
+              width={120}
+              height={120}
+              className="rounded-xl object-cover"
+              priority
+            />
+          </div>
+        </motion.div>
+
         <motion.h1
           className="font-heading text-4xl font-bold leading-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl"
           initial={{ opacity: 0, y: 30 }}
