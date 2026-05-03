@@ -235,7 +235,7 @@ export default function Hero() {
         >
           Ignite Designs.
           <br />
-          Illuminate Dreams.
+          Illuminate <span className="highlight-pill">Dreams.</span>
         </motion.h1>
 
         {/* Typing effect sub-headline */}
