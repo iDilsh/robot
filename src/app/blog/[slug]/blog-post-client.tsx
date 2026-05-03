@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useMemo } from 'react';
+import { use, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
@@ -581,14 +581,55 @@ function PostHero({
   );
 }
 
-function ArticleBody({ slug }: { slug: string }) {
+function ArticleBody({ slug, content: jsonContent }: { slug: string; content?: string }) {
   const contentData = BLOG_CONTENT[slug];
 
-  if (!contentData) {
+  // If we have hardcoded JSX content, use it
+  if (contentData) {
     return (
       <section className="py-12 md:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <p className="text-muted-foreground">Content coming soon...</p>
+          <motion.article
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="prose-custom"
+          >
+            {contentData.content}
+          </motion.article>
+        </div>
+      </section>
+    );
+  }
+
+  // Otherwise, render the text content from JSON data
+  if (jsonContent) {
+    return (
+      <section className="py-12 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <motion.article
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="prose-custom space-y-6 text-slate-700"
+          >
+            {jsonContent.split('\n\n').map((paragraph, i) => {
+              if (paragraph.startsWith('## ')) {
+                return <h2 key={i} className="font-heading text-2xl font-bold text-slate-900 pt-4">{paragraph.replace('## ', '')}</h2>;
+              }
+              if (paragraph.startsWith('### ')) {
+                return <h3 key={i} className="font-heading text-xl font-bold text-slate-900 pt-3">{paragraph.replace('### ', '')}</h3>;
+              }
+              if (paragraph.startsWith('> ')) {
+                return (
+                  <blockquote key={i} className="border-l-4 border-brand-violet pl-6 py-2 my-8 bg-brand-violet/5 rounded-r-lg">
+                    <p className="text-lg italic text-slate-700">{paragraph.replace('> ', '')}</p>
+                  </blockquote>
+                );
+              }
+              return <p key={i} className="leading-relaxed">{paragraph}</p>;
+            })}
+          </motion.article>
         </div>
       </section>
     );
@@ -597,22 +638,18 @@ function ArticleBody({ slug }: { slug: string }) {
   return (
     <section className="py-12 md:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <motion.article
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="prose-custom"
-        >
-          {contentData.content}
-        </motion.article>
+        <p className="text-muted-foreground">Content coming soon...</p>
       </div>
     </section>
   );
 }
 
-function TagsSection({ slug }: { slug: string }) {
+function TagsSection({ slug, keywords }: { slug: string; keywords?: string[] }) {
   const contentData = BLOG_CONTENT[slug];
-  if (!contentData) return null;
+  
+  // Use hardcoded tags if available, otherwise use keywords from JSON data
+  const tags = contentData?.tags || keywords || [];
+  if (tags.length === 0) return null;
 
   return (
     <section className="pb-12 md:pb-16">
@@ -684,8 +721,8 @@ function AuthorBio() {
   );
 }
 
-function RelatedPosts({ currentSlug, currentCategory }: { currentSlug: string; currentCategory: string }) {
-  const related = BLOG_POSTS
+function RelatedPosts({ currentSlug, currentCategory, allPosts }: { currentSlug: string; currentCategory: string; allPosts: typeof BLOG_POSTS }) {
+  const related = allPosts
     .filter((p) => p.slug !== currentSlug)
     .sort((a, b) => {
       // Prefer same category
@@ -829,8 +866,41 @@ function CTASection() {
 
 export default function BlogPostClient({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
+  const [allPosts, setAllPosts] = useState<typeof BLOG_POSTS>(BLOG_POSTS);
+  const [loading, setLoading] = useState(true);
 
-  const post = useMemo(() => BLOG_POSTS.find((p) => p.slug === slug), [slug]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch('/api/public/blog');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setAllPosts(data);
+          }
+        }
+      } catch {
+        // Keep fallback to BLOG_POSTS
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const post = allPosts.find((p: any) => p.slug === slug);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex flex-col">
+        <Navbar />
+        <section className="flex flex-1 items-center justify-center pt-28">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-violet border-t-transparent" />
+        </section>
+        <Footer />
+      </main>
+    );
+  }
 
   // Fallback if slug not found
   if (!post) {
@@ -863,10 +933,10 @@ export default function BlogPostClient({ params }: { params: Promise<{ slug: str
         readTime={post.readTime}
         slug={post.slug}
       />
-      <ArticleBody slug={post.slug} />
-      <TagsSection slug={post.slug} />
+      <ArticleBody slug={post.slug} content={(post as any).content} />
+      <TagsSection slug={post.slug} keywords={(post as any).keywords} />
       <AuthorBio />
-      <RelatedPosts currentSlug={post.slug} currentCategory={post.category} />
+      <RelatedPosts currentSlug={post.slug} currentCategory={post.category} allPosts={allPosts} />
       <CTASection />
       <div className="mt-auto">
         <Footer />

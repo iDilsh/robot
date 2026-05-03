@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronRight, Home, ArrowRight } from 'lucide-react';
@@ -11,6 +11,16 @@ import { PORTFOLIO_PROJECTS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 /* ────────────────────────── Data ────────────────────────── */
+
+interface PortfolioProject {
+  id: number;
+  title: string;
+  client: string;
+  category: string;
+  description: string;
+  imageUrl: string;
+  published: boolean;
+}
 
 const CATEGORIES = [
   'All',
@@ -133,7 +143,7 @@ function ProjectCard({
   project,
   index,
 }: {
-  project: (typeof PORTFOLIO_PROJECTS)[number];
+  project: PortfolioProject;
   index: number;
 }) {
   const gradient = PROJECT_GRADIENTS[project.id] || 'from-violet-500 to-purple-600';
@@ -211,11 +221,11 @@ function ProjectCard({
   );
 }
 
-function PortfolioGrid({ activeFilter }: { activeFilter: Category }) {
+function PortfolioGrid({ activeFilter, projects }: { activeFilter: Category; projects: PortfolioProject[] }) {
   const filteredProjects =
     activeFilter === 'All'
-      ? PORTFOLIO_PROJECTS
-      : PORTFOLIO_PROJECTS.filter((p) => p.category === activeFilter);
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
 
   return (
     <section className="pb-20 md:pb-28">
@@ -299,13 +309,36 @@ function CTASection() {
 
 export default function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState<Category>('All');
+  const [projects, setProjects] = useState<PortfolioProject[]>([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch('/api/public/portfolio');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setProjects(data);
+          } else {
+            setProjects(PORTFOLIO_PROJECTS as unknown as PortfolioProject[]);
+          }
+        } else {
+          setProjects(PORTFOLIO_PROJECTS as unknown as PortfolioProject[]);
+        }
+      } catch {
+        setProjects(PORTFOLIO_PROJECTS as unknown as PortfolioProject[]);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
     <main className="min-h-screen flex flex-col">
       <Navbar />
       <PageHero />
       <FilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-      <PortfolioGrid activeFilter={activeFilter} />
+      <PortfolioGrid activeFilter={activeFilter} projects={projects} />
       <CTASection />
       <div className="mt-auto">
         <Footer />

@@ -1,12 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PORTFOLIO_PROJECTS } from '@/lib/constants';
 import SectionHeading from '@/components/ui-extensions/section-heading';
 import GradientButton from '@/components/ui-extensions/gradient-button';
-
-const featuredProjects = PORTFOLIO_PROJECTS.slice(0, 6);
 
 const categoryColors: Record<string, string> = {
   Branding: 'bg-white/20 text-white',
@@ -17,6 +16,27 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function PortfolioPreview() {
+  const [projects, setProjects] = useState(PORTFOLIO_PROJECTS);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch('/api/public/portfolio');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setProjects(data);
+          }
+        }
+      } catch {
+        // Keep fallback
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  const featuredProjects = projects.slice(0, 6);
+
   return (
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
@@ -19,6 +19,19 @@ import { BLOG_POSTS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 /* ────────────────────────── Data ────────────────────────── */
+
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  readTime: string;
+  featured: boolean;
+  published: boolean;
+  keywords: string[];
+}
 
 const CATEGORIES = [
   'All',
@@ -118,8 +131,8 @@ function PageHero() {
   );
 }
 
-function FeaturedPost() {
-  const featured = BLOG_POSTS.find((p) => p.featured);
+function FeaturedPost({ posts }: { posts: BlogPost[] }) {
+  const featured = posts.find((p) => p.featured);
   if (!featured) return null;
 
   const colorClass = CATEGORY_COLORS[featured.category] || 'bg-slate-100 text-slate-700';
@@ -216,7 +229,7 @@ function PostCard({
   post,
   index,
 }: {
-  post: (typeof BLOG_POSTS)[number];
+  post: BlogPost;
   index: number;
 }) {
   const gradient = POST_GRADIENTS[post.slug] || 'from-violet-500 to-purple-600';
@@ -288,9 +301,9 @@ function PostCard({
   );
 }
 
-function PostGrid({ activeFilter }: { activeFilter: Category }) {
-  const featured = BLOG_POSTS.find((p) => p.featured);
-  const nonFeatured = BLOG_POSTS.filter((p) => !p.featured);
+function PostGrid({ activeFilter, posts }: { activeFilter: Category; posts: BlogPost[] }) {
+  const featured = posts.find((p) => p.featured);
+  const nonFeatured = posts.filter((p) => !p.featured);
 
   const filteredPosts =
     activeFilter === 'All'
@@ -397,14 +410,38 @@ function NewsletterCTA() {
 
 export default function BlogPage() {
   const [activeFilter, setActiveFilter] = useState<Category>('All');
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch('/api/public/blog');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setPosts(data);
+          } else {
+            // Fallback to constants
+            setPosts(BLOG_POSTS as unknown as BlogPost[]);
+          }
+        } else {
+          setPosts(BLOG_POSTS as unknown as BlogPost[]);
+        }
+      } catch {
+        setPosts(BLOG_POSTS as unknown as BlogPost[]);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
     <main className="min-h-screen flex flex-col">
       <Navbar />
       <PageHero />
-      <FeaturedPost />
+      <FeaturedPost posts={posts} />
       <CategoryFilter activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-      <PostGrid activeFilter={activeFilter} />
+      <PostGrid activeFilter={activeFilter} posts={posts} />
       <NewsletterCTA />
       <div className="mt-auto">
         <Footer />

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '@/lib/constants';
@@ -24,7 +25,26 @@ const gradientColors: Record<string, string> = {
 };
 
 export default function BlogTeaser() {
-  const posts = BLOG_POSTS.slice(0, 3);
+  const [posts, setPosts] = useState(BLOG_POSTS);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch('/api/public/blog');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setPosts(data);
+          }
+        }
+      } catch {
+        // Keep fallback
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const displayPosts = posts.slice(0, 3);
 
   return (
     <section className="py-20 md:py-28">
@@ -36,7 +56,7 @@ export default function BlogTeaser() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post, index) => (
+          {displayPosts.map((post, index) => (
             <motion.article
               key={post.slug}
               className="group overflow-hidden rounded-2xl border border-border/50 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-brand-violet/15"

@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "title": "BrightStar Brand Identity",
+    "client": "BrightStar Co.",
+    "category": "Branding",
+    "description": "Complete brand identity design including logo, business cards, and style guide for a tech startup.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-01-15T10:00:00.000Z",
+    "updatedAt": "2026-01-15T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "TechVentures Promotional Video",
+    "client": "TechVentures",
+    "category": "Video",
+    "description": "Dynamic promotional video showcasing the company's innovative solutions and company culture.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-02-10T10:00:00.000Z",
+    "updatedAt": "2026-02-10T10:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "NovaBrand E-commerce Website",
+    "client": "NovaBrand",
+    "category": "Web",
+    "description": "Full e-commerce website design and development with custom product configurator.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-02-20T10:00:00.000Z",
+    "updatedAt": "2026-02-20T10:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "title": "StartUp Hub Social Campaign",
+    "client": "StartUp Hub",
+    "category": "Social Media",
+    "description": "6-month social media strategy and content creation that tripled engagement rates.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-03-05T10:00:00.000Z",
+    "updatedAt": "2026-03-05T10:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "title": "Aurora AI Art Collection",
+    "client": "Aurora Gallery",
+    "category": "AI Creations",
+    "description": "AI-generated art collection combined with traditional design for a unique gallery exhibition.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-03-15T10:00:00.000Z",
+    "updatedAt": "2026-03-15T10:00:00.000Z"
+  },
+  {
+    "id": 6,
+    "title": "FreshBite Restaurant Branding",
+    "client": "FreshBite",
+    "category": "Branding",
+    "description": "Vibrant brand identity for a health-focused restaurant chain including menu design and signage.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-03-25T10:00:00.000Z",
+    "updatedAt": "2026-03-25T10:00:00.000Z"
+  },
+  {
+    "id": 7,
+    "title": "CloudSync Product Demo",
+    "client": "CloudSync",
+    "category": "Video",
+    "description": "Animated product demo video explaining complex SaaS features in an engaging way.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-04-01T10:00:00.000Z",
+    "updatedAt": "2026-04-01T10:00:00.000Z"
+  },
+  {
+    "id": 8,
+    "title": "GreenLeaf Landing Page",
+    "client": "GreenLeaf",
+    "category": "Web",
+    "description": "High-converting landing page design for an eco-friendly product launch campaign.",
+    "imageUrl": "",
+    "published": true,
+    "createdAt": "2026-04-10T10:00:00.000Z",
+    "updatedAt": "2026-04-10T10:00:00.000Z"
+  }
+]
