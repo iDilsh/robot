@@ -608,6 +608,7 @@ export default function QuotePage() {
   const [direction, setDirection] = useState(1);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -645,9 +646,44 @@ export default function QuotePage() {
     }
   };
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const selectedServiceNames = SERVICES.filter((s) =>
+        formData.selectedServices.includes(s.slug)
+      ).map((s) => s.title);
+
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          services: selectedServiceNames.join(', '),
+          projectDescription: formData.projectDescription,
+          timeline: formData.timeline,
+          budget: formData.budget,
+          requirements: formData.requirements,
+          fullName: formData.fullName,
+          email: formData.email,
+          company: formData.company,
+          country: formData.country,
+          phone: formData.phone,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Submission failed');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }
+  };
+
   const handleNext = () => {
     if (currentStep === 4) {
-      setSubmitted(true);
+      handleSubmit();
       return;
     }
     if (canProceed() && currentStep < 4) {
@@ -737,14 +773,24 @@ export default function QuotePage() {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!canProceed()}
-                className={`inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-300 cursor-pointer ${
-                  canProceed()
-                    ? 'bg-gradient-to-r from-brand-violet to-[#6D28D9] text-white hover:from-[#8B5CF6] hover:to-brand-violet hover:scale-[1.03] hover:shadow-[0_10px_25px_rgba(124,58,237,0.25),0_4px_10px_rgba(124,58,237,0.15)] active:scale-[1.01]'
+                disabled={!canProceed() || isSubmitting}
+                className={`inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-300 ${
+                  isSubmitting
+                    ? 'bg-gradient-to-r from-brand-violet to-[#6D28D9] text-white/80 cursor-wait'
+                    : canProceed()
+                    ? 'bg-gradient-to-r from-brand-violet to-[#6D28D9] text-white hover:from-[#8B5CF6] hover:to-brand-violet hover:scale-[1.03] hover:shadow-[0_10px_25px_rgba(124,58,237,0.25),0_4px_10px_rgba(124,58,237,0.15)] active:scale-[1.01] cursor-pointer'
                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 }`}
               >
-                {currentStep === 4 ? (
+                {isSubmitting ? (
+                  <>
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Submitting...
+                  </>
+                ) : currentStep === 4 ? (
                   <>
                     Submit Quote Request
                     <Send className="h-4 w-4" />
