@@ -23,26 +23,129 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white">
-      {/* Animated gradient mesh background */}
+      {/* Circular arc shapes background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-brand-violet/8 blur-3xl" />
-        <motion.div
-          className="absolute top-1/4 right-0 h-80 w-80 rounded-full bg-brand-cyan/8 blur-3xl"
-          animate={{
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 left-1/4 h-72 w-72 rounded-full bg-brand-violet/6 blur-3xl"
-          animate={{
-            x: [0, -20, 0],
-            y: [0, 25, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-brand-cyan/5 blur-3xl" />
+        {/* Left arc — large C-shape on left side */}
+        <motion.svg
+          className="absolute -left-[20%] top-[5%] h-[90%] w-[70%]"
+          viewBox="0 0 600 800"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
+        >
+          <motion.path
+            d="M 580 50 A 400 400 0 0 0 580 750"
+            stroke="url(#leftArcGradient)"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, delay: 0.5, ease: 'easeInOut' }}
+          />
+          <motion.path
+            d="M 520 120 A 320 320 0 0 0 520 680"
+            stroke="url(#leftArcGradient2)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2.2, delay: 0.7, ease: 'easeInOut' }}
+          />
+          <motion.path
+            d="M 460 190 A 240 240 0 0 0 460 610"
+            stroke="url(#leftArcGradient3)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2.4, delay: 0.9, ease: 'easeInOut' }}
+          />
+          <defs>
+            <linearGradient id="leftArcGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.35" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.35" />
+            </linearGradient>
+            <linearGradient id="leftArcGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="leftArcGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.15" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.15" />
+            </linearGradient>
+          </defs>
+        </motion.svg>
+
+        {/* Right arc — large C-shape on right side */}
+        <motion.svg
+          className="absolute -right-[20%] top-[5%] h-[90%] w-[70%]"
+          viewBox="0 0 600 800"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
+        >
+          <motion.path
+            d="M 20 50 A 400 400 0 0 1 20 750"
+            stroke="url(#rightArcGradient)"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, delay: 0.5, ease: 'easeInOut' }}
+          />
+          <motion.path
+            d="M 80 120 A 320 320 0 0 1 80 680"
+            stroke="url(#rightArcGradient2)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2.2, delay: 0.7, ease: 'easeInOut' }}
+          />
+          <motion.path
+            d="M 140 190 A 240 240 0 0 1 140 610"
+            stroke="url(#rightArcGradient3)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2.4, delay: 0.9, ease: 'easeInOut' }}
+          />
+          <defs>
+            <linearGradient id="rightArcGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.35" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.35" />
+            </linearGradient>
+            <linearGradient id="rightArcGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="rightArcGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.15" />
+              <stop offset="50%" stopColor="#06B6D4" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.15" />
+            </linearGradient>
+          </defs>
+        </motion.svg>
+
+        {/* Subtle gradient mesh underlays */}
+        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-brand-violet/5 blur-3xl" />
+        <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-brand-cyan/4 blur-3xl" />
       </div>
 
       {/* Floating decorative circles */}
