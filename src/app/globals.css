@@ -237,16 +237,18 @@
   .highlight-pill::before {
     content: '';
     position: absolute;
-    inset: -0.12em -0.25em;
-    background: linear-gradient(135deg, #9333ea 0%, #7C3AED 30%, #06B6D4 70%, #F59E0B 100%);
-    border-radius: 0.35em;
-    opacity: 0.18;
+    inset: -0.06em -0.18em;
+    background: linear-gradient(135deg, #9333ea 0%, #7C3AED 40%, #a78bfa 70%, #c4b5fd 100%);
+    border-radius: 0.3em;
+    opacity: 0.20;
     z-index: -1;
-    transition: opacity 0.3s ease;
+    transform: rotate(-2deg);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .highlight-pill:hover::before {
-    opacity: 0.28;
+    opacity: 0.30;
+    transform: rotate(-1deg);
   }
 }
 
