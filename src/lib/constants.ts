@@ -2,7 +2,7 @@ export const SITE_NAME = "iDilsh Network";
 export const SITE_TAGLINE = "Ignite Designs. Illuminate Dreams.";
 export const SITE_URL = "https://idilsh.top";
 export const CONTACT_EMAIL = "hello@idilsh.top";
-export const WHATSAPP_LINK = "https://wa.me/94700000000";
+export const WHATSAPP_LINK = "https://wa.me/94773226376";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -51,10 +51,10 @@ export const SERVICES = [
     icon: "Share2",
   },
   {
-    slug: "guides",
-    title: "Free Guides",
+    slug: "other",
+    title: "Other",
     description:
-      "Expert resources and guides to help you navigate the digital landscape.",
+      "Have a unique request or need something different? We can help with that too.",
     icon: "BookOpen",
   },
 ];

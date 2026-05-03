@@ -19,11 +19,12 @@ import {
   FileSearch,
   PhoneCall,
   Send,
+  MessageCircle,
 } from 'lucide-react';
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import GradientButton from '@/components/ui-extensions/gradient-button';
-import { SERVICES } from '@/lib/constants';
+import { SERVICES, WHATSAPP_LINK } from '@/lib/constants';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -266,6 +267,22 @@ function Step1Service({
           Please select at least one service to continue.
         </p>
       )}
+
+      {/* WhatsApp CTA */}
+      <div className="mt-6 flex items-center gap-3">
+        <div className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs text-muted-foreground">or</span>
+        <div className="h-px flex-1 bg-slate-200" />
+      </div>
+      <a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#20BD5A] hover:shadow-[0_4px_14px_rgba(37,211,102,0.35)] active:scale-[0.98] cursor-pointer"
+      >
+        <MessageCircle className="h-4.5 w-4.5" />
+        Start project on WhatsApp
+      </a>
     </div>
   );
 }
