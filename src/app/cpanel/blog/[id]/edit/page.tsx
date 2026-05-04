@@ -3,8 +3,18 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Loader2, Trash2, X, Save, Upload } from 'lucide-react';
+
+const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), {
+  ssr: false,
+  loading: () => (
+    <div className="rounded-lg border border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-400">
+      Loading editor...
+    </div>
+  ),
+});
 
 const CATEGORIES = ['Branding', 'Marketing', 'AI', 'Design', 'Video', 'Web Design'];
 
@@ -267,33 +277,17 @@ export default function CpanelBlogEditPage({
 
           {/* Content */}
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-sm font-medium text-slate-700">Content</label>
-              <details className="group">
-                <summary className="cursor-pointer text-xs font-medium text-[#7C3AED] hover:underline">
-                  Markdown Guide
-                </summary>
-                <div className="mt-2 rounded-lg bg-slate-50 border border-slate-200 p-4 text-xs text-slate-600 space-y-1.5">
-                  <p><code className="bg-slate-200 px-1 rounded">## Heading 2</code> &rarr; Large section heading</p>
-                  <p><code className="bg-slate-200 px-1 rounded">### Heading 3</code> &rarr; Sub heading</p>
-                  <p><code className="bg-slate-200 px-1 rounded">**bold text**</code> &rarr; <strong>bold text</strong></p>
-                  <p><code className="bg-slate-200 px-1 rounded">*italic text*</code> &rarr; <em>italic text</em></p>
-                  <p><code className="bg-slate-200 px-1 rounded">{'>'} quote text</code> &rarr; Purple blockquote</p>
-                  <p><code className="bg-slate-200 px-1 rounded">- list item</code> &rarr; Bullet point with violet dot</p>
-                  <p><code className="bg-slate-200 px-1 rounded">1. list item</code> &rarr; Numbered list</p>
-                  <p><code className="bg-slate-200 px-1 rounded">---</code> &rarr; Horizontal divider</p>
-                  <p><code className="bg-slate-200 px-1 rounded">{'`'}inline code{'`'}</code> &rarr; Highlighted code</p>
-                  <p><code className="bg-slate-200 px-1 rounded">[link text](url)</code> &rarr; Clickable link</p>
-                  <p><code className="bg-slate-200 px-1 rounded">![alt](image-url)</code> &rarr; Image</p>
-                </div>
-              </details>
-            </div>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder={`Write your blog post using Markdown...\n\n## My Section Title\n\nThis is a paragraph with **bold** and *italic* text.\n\n> This becomes a stylish purple blockquote\n\n- First bullet point\n- Second bullet point`}
-              rows={16}
-              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] outline-none transition w-full resize-y font-mono"
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Content
+            </label>
+            <p className="mb-3 text-xs text-slate-400">
+              Use the toolbar to format text with headings, bold, italic, lists, quotes, links, images, and more.
+              You can also switch to Markdown source mode using the last toolbar button.
+            </p>
+            <RichTextEditor
+              markdown={content}
+              onChange={setContent}
+              placeholder="Start writing your blog post... Use the toolbar to add headings, lists, quotes, and more."
             />
           </div>
 
