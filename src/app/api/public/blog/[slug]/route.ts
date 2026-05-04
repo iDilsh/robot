@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { readData } from '@/lib/data';
+import { db, serializePost } from '@/lib/db';
 
 export async function GET(
   request: Request,
@@ -7,14 +7,15 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const posts = readData<any[]>('blog-posts.json');
-    const post = posts.find((p) => p.slug === slug && p.published);
+    const post = await db.blogPost.findFirst({
+      where: { slug, published: true },
+    });
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    return NextResponse.json(post);
+    return NextResponse.json(serializePost(post));
   } catch {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 });
   }

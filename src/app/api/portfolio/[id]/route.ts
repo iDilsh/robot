@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readData, writeData, PortfolioProject } from '@/lib/data';
+import { db, serializeProject } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
@@ -7,14 +7,15 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const projects = readData<PortfolioProject[]>('portfolio-projects.json');
-    const project = projects.find((p) => p.id === Number(id));
+    const project = await db.portfolioProject.findUnique({
+      where: { id: Number(id) },
+    });
 
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    return NextResponse.json(project);
+    return NextResponse.json(serializeProject(project));
   } catch (error) {
     console.error('Error reading project:', error);
     return NextResponse.json({ error: 'Failed to read project' }, { status: 500 });
@@ -28,21 +29,27 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const projects = readData<PortfolioProject[]>('portfolio-projects.json');
-    const index = projects.findIndex((p) => p.id === Number(id));
 
-    if (index === -1) {
+    const existing = await db.portfolioProject.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!existing) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    projects[index] = {
-      ...projects[index],
-      ...body,
-      updatedAt: new Date().toISOString(),
-    };
+    const updated = await db.portfolioProject.update({
+      where: { id: Number(id) },
+      data: {
+        ...(body.title !== undefined && { title: body.title }),
+        ...(body.client !== undefined && { client: body.client }),
+        ...(body.category !== undefined && { category: body.category }),
+        ...(body.description !== undefined && { description: body.description }),
+        ...(body.imageUrl !== undefined && { imageUrl: body.imageUrl }),
+        ...(body.published !== undefined && { published: body.published }),
+      },
+    });
 
-    writeData('portfolio-projects.json', projects);
-    return NextResponse.json(projects[index]);
+    return NextResponse.json(serializeProject(updated));
   } catch (error) {
     console.error('Error updating project:', error);
     return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
@@ -55,16 +62,15 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const projects = readData<PortfolioProject[]>('portfolio-projects.json');
-    const index = projects.findIndex((p) => p.id === Number(id));
 
-    if (index === -1) {
+    const existing = await db.portfolioProject.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!existing) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    projects.splice(index, 1);
-    writeData('portfolio-projects.json', projects);
-
+    await db.portfolioProject.delete({ where: { id: Number(id) } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting project:', error);

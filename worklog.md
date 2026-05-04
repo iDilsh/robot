@@ -41,3 +41,41 @@ Stage Summary:
 - Featured images display on blog listing (featured post banner + post cards)
 - Featured images display on blog detail page hero section
 - All existing blog posts have featuredImage field (empty string) for backward compatibility
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Migrate iDilsh Network from local file storage to cloud services for Vercel deployment compatibility
+
+Work Log:
+- Diagnosed root cause: Vercel has read-only filesystem, so fs.writeFileSync (JSON files) and local uploads fail
+- All data was stored in JSON files (blog-posts.json, portfolio-projects.json, site-settings.json) via readData/writeData helpers
+- No /api/upload route existed - image uploads were failing silently
+- Installed @vercel/blob package for cloud image storage
+- Updated Prisma schema from SQLite to PostgreSQL with proper BlogPost, PortfolioProject, SiteSettings models
+- Created /api/upload route using Vercel Blob for cloud image uploads
+- Rewrote all API routes to use Prisma instead of fs-based JSON storage:
+  - /api/blog (GET/POST) - uses Prisma db.blogPost
+  - /api/blog/[id] (GET/PUT/DELETE) - uses Prisma db.blogPost
+  - /api/portfolio (GET/POST) - uses Prisma db.portfolioProject
+  - /api/portfolio/[id] (GET/PUT/DELETE) - uses Prisma db.portfolioProject
+  - /api/settings (GET/PUT) - uses Prisma db.siteSettings with upsert
+  - /api/public/blog (GET) - uses Prisma with published filter
+  - /api/public/blog/[slug] (GET) - uses Prisma with slug/published filter
+  - /api/public/portfolio (GET) - uses Prisma with published filter
+  - /api/public/settings (GET) - uses Prisma
+- Updated src/lib/data.ts to keep TypeScript interfaces but remove fs-based storage
+- Updated src/lib/db.ts with serialization helpers for Prisma objects
+- Fixed next.config.ts: removed "output: standalone", added Vercel Blob image domain
+- Updated package.json: simplified build/start scripts for Vercel, added db:seed and postinstall
+- Created prisma/seed.ts with all existing blog posts, portfolio projects, and site settings
+- Updated .env with required Vercel environment variables
+- Build passes successfully with all routes intact
+
+Stage Summary:
+- Complete migration from local filesystem to cloud-native storage
+- Blog/Portfolio/Settings data → Vercel Postgres (Neon PostgreSQL)
+- Image uploads → Vercel Blob (cloud object storage)
+- All API routes rewritten to use Prisma ORM
+- No frontend changes needed - API contract preserved
+- Project builds and all routes work correctly

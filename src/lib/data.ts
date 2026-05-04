@@ -1,26 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-
-const DATA_DIR = path.join(process.cwd(), 'data');
-
-export function readData<T>(filename: string): T {
-  const filePath = path.join(DATA_DIR, filename);
-  const raw = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(raw) as T;
-}
-
-export function writeData<T>(filename: string, data: T): void {
-  const filePath = path.join(DATA_DIR, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-}
-
-export function generateId(): string {
-  return 'bp-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
-}
-
-export function generateNumericId(): number {
-  return Date.now();
-}
+// TypeScript interfaces — shared across the app
+// Data storage is now handled by Prisma + PostgreSQL (cloud database)
+// These interfaces are kept for type safety in frontend components
 
 export interface BlogPost {
   id: string;
@@ -59,4 +39,12 @@ export interface SiteSettings {
   whatsappLink: string;
   navLogoUrl: string;
   heroLogoUrl: string;
+}
+
+// Helper to generate a slug from text
+export function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }

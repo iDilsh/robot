@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readData, writeData, generateNumericId, PortfolioProject } from '@/lib/data';
+import { db, serializeProject } from '@/lib/db';
 
 export async function GET() {
   try {
-    const projects = readData<PortfolioProject[]>('portfolio-projects.json');
-    return NextResponse.json(projects);
+    const projects = await db.portfolioProject.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return NextResponse.json(projects.map(serializeProject));
   } catch (error) {
     console.error('Error reading portfolio:', error);
     return NextResponse.json({ error: 'Failed to read projects' }, { status: 500 });
@@ -14,24 +16,19 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const projects = readData<PortfolioProject[]>('portfolio-projects.json');
 
-    const newProject: PortfolioProject = {
-      id: generateNumericId(),
-      title: body.title || '',
-      client: body.client || '',
-      category: body.category || 'Branding',
-      description: body.description || '',
-      imageUrl: body.imageUrl || '',
-      published: body.published || false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    const newProject = await db.portfolioProject.create({
+      data: {
+        title: body.title || '',
+        client: body.client || '',
+        category: body.category || 'Branding',
+        description: body.description || '',
+        imageUrl: body.imageUrl || '',
+        published: body.published || false,
+      },
+    });
 
-    projects.unshift(newProject);
-    writeData('portfolio-projects.json', projects);
-
-    return NextResponse.json(newProject, { status: 201 });
+    return NextResponse.json(serializeProject(newProject), { status: 201 });
   } catch (error) {
     console.error('Error creating project:', error);
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
