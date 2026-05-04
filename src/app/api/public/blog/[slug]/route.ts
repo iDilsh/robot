@@ -16,7 +16,8 @@ export async function GET(
     }
 
     return NextResponse.json(serializePost(post));
-  } catch {
-    return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+  } catch (error) {
+    console.error('Error fetching blog post by slug:', error);
+    return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
   }
 }

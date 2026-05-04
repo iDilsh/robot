@@ -101,7 +101,7 @@ async function sendEmailNotification(data: QuoteSubmission) {
 
   await getResend().emails.send({
     from: 'iDilsh Network <onboarding@resend.dev>',
-    to: NOTIFICATION_EMAIL!,
+    to: NOTIFICATION_EMAIL || 'onboarding@resend.dev',
     subject: `New Quote Request from ${data.fullName}`,
     html,
   });
@@ -187,11 +187,11 @@ export async function POST(request: NextRequest) {
     const emailFailed = results[0].status === 'rejected';
     const sheetsFailed = results[1].status === 'rejected';
 
-    if (emailFailed && results[0].status === 'rejected') {
-      console.error('Email failed:', results[0].reason);
+    if (emailFailed) {
+      console.error('Email failed:', (results[0] as PromiseRejectedResult).reason);
     }
-    if (sheetsFailed && results[1].status === 'rejected') {
-      console.error('Google Sheets failed:', results[1].reason);
+    if (sheetsFailed) {
+      console.error('Google Sheets failed:', (results[1] as PromiseRejectedResult).reason);
     }
 
     // Return success even if one fails — the user already submitted

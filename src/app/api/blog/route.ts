@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, serializePost } from '@/lib/db';
 import { generateSlug } from '@/lib/data';
+import { requireAuth } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = await requireAuth(request);
+  if (authError) return authError;
+
   try {
     const posts = await db.blogPost.findMany({
       orderBy: { createdAt: 'desc' },
@@ -15,6 +19,9 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const authError = await requireAuth(request);
+  if (authError) return authError;
+
   try {
     const body = await request.json();
 
