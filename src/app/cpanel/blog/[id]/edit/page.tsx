@@ -267,12 +267,32 @@ export default function CpanelBlogEditPage({
 
           {/* Content */}
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Content</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-medium text-slate-700">Content</label>
+              <details className="group">
+                <summary className="cursor-pointer text-xs font-medium text-[#7C3AED] hover:underline">
+                  Markdown Guide
+                </summary>
+                <div className="mt-2 rounded-lg bg-slate-50 border border-slate-200 p-4 text-xs text-slate-600 space-y-1.5">
+                  <p><code className="bg-slate-200 px-1 rounded">## Heading 2</code> &rarr; Large section heading</p>
+                  <p><code className="bg-slate-200 px-1 rounded">### Heading 3</code> &rarr; Sub heading</p>
+                  <p><code className="bg-slate-200 px-1 rounded">**bold text**</code> &rarr; <strong>bold text</strong></p>
+                  <p><code className="bg-slate-200 px-1 rounded">*italic text*</code> &rarr; <em>italic text</em></p>
+                  <p><code className="bg-slate-200 px-1 rounded">{'>'} quote text</code> &rarr; Purple blockquote</p>
+                  <p><code className="bg-slate-200 px-1 rounded">- list item</code> &rarr; Bullet point with violet dot</p>
+                  <p><code className="bg-slate-200 px-1 rounded">1. list item</code> &rarr; Numbered list</p>
+                  <p><code className="bg-slate-200 px-1 rounded">---</code> &rarr; Horizontal divider</p>
+                  <p><code className="bg-slate-200 px-1 rounded">{'`'}inline code{'`'}</code> &rarr; Highlighted code</p>
+                  <p><code className="bg-slate-200 px-1 rounded">[link text](url)</code> &rarr; Clickable link</p>
+                  <p><code className="bg-slate-200 px-1 rounded">![alt](image-url)</code> &rarr; Image</p>
+                </div>
+              </details>
+            </div>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your blog post content here..."
-              rows={12}
+              placeholder={`Write your blog post using Markdown...\n\n## My Section Title\n\nThis is a paragraph with **bold** and *italic* text.\n\n> This becomes a stylish purple blockquote\n\n- First bullet point\n- Second bullet point`}
+              rows={16}
               className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED] outline-none transition w-full resize-y font-mono"
             />
           </div>

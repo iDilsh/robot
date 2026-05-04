@@ -17,6 +17,7 @@ import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import GradientButton from '@/components/ui-extensions/gradient-button';
 import { BLOG_POSTS } from '@/lib/constants';
+import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 
 /* ────────────────────────── Types ────────────────────────── */
@@ -618,7 +619,7 @@ function ArticleBody({ slug, content: jsonContent }: { slug: string; content?: s
     );
   }
 
-  // Otherwise, render the text content from JSON data
+  // Otherwise, render the text content as Markdown
   if (jsonContent) {
     return (
       <section className="py-12 md:py-20">
@@ -627,24 +628,101 @@ function ArticleBody({ slug, content: jsonContent }: { slug: string; content?: s
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="prose-custom space-y-6 text-slate-700"
+            className="prose-custom"
           >
-            {jsonContent.split('\n\n').map((paragraph, i) => {
-              if (paragraph.startsWith('## ')) {
-                return <h2 key={i} className="font-heading text-2xl font-bold text-slate-900 pt-4">{paragraph.replace('## ', '')}</h2>;
-              }
-              if (paragraph.startsWith('### ')) {
-                return <h3 key={i} className="font-heading text-xl font-bold text-slate-900 pt-3">{paragraph.replace('### ', '')}</h3>;
-              }
-              if (paragraph.startsWith('> ')) {
-                return (
-                  <blockquote key={i} className="border-l-4 border-brand-violet pl-6 py-2 my-8 bg-brand-violet/5 rounded-r-lg">
-                    <p className="text-lg italic text-slate-700">{paragraph.replace('> ', '')}</p>
+            <ReactMarkdown
+              components={{
+                h1: ({ children }) => (
+                  <h1 className="font-heading text-3xl font-bold text-slate-900 pt-8 pb-2">{children}</h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="font-heading text-2xl font-bold text-slate-900 pt-8 pb-2">{children}</h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="font-heading text-xl font-bold text-slate-900 pt-6 pb-2">{children}</h3>
+                ),
+                h4: ({ children }) => (
+                  <h4 className="font-heading text-lg font-bold text-slate-900 pt-4 pb-1">{children}</h4>
+                ),
+                p: ({ children }) => (
+                  <p className="leading-relaxed text-slate-700 mb-4">{children}</p>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 border-brand-violet pl-6 py-3 my-8 bg-brand-violet/5 rounded-r-lg">
+                    {children}
                   </blockquote>
-                );
-              }
-              return <p key={i} className="leading-relaxed">{paragraph}</p>;
-            })}
+                ),
+                // Inside blockquote, make paragraphs italic and styled
+                // (ReactMarkdown wraps blockquote content in <p>)
+                ul: ({ children }) => (
+                  <ul className="space-y-2 my-4 ml-1">{children}</ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="space-y-2 my-4 ml-1 list-decimal list-inside">{children}</ol>
+                ),
+                li: ({ children, ordered }) => (
+                  <li className="flex items-start gap-2 text-slate-700">
+                    {!ordered && (
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-violet" />
+                    )}
+                    <span className="leading-relaxed">{children}</span>
+                  </li>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-bold text-slate-900">{children}</strong>
+                ),
+                em: ({ children }) => (
+                  <em className="italic text-slate-600">{children}</em>
+                ),
+                a: ({ href, children }) => (
+                  <a href={href} className="text-brand-violet underline hover:text-brand-violet/80 transition-colors" target="_blank" rel="noopener noreferrer">
+                    {children}
+                  </a>
+                ),
+                hr: () => (
+                  <hr className="my-8 border-t border-slate-200" />
+                ),
+                code: ({ className, children }) => {
+                  const isBlock = className?.includes('language-');
+                  if (isBlock) {
+                    return (
+                      <div className="my-6 rounded-xl overflow-hidden border border-slate-200">
+                        <pre className="bg-slate-900 text-slate-100 p-6 overflow-x-auto text-sm leading-relaxed">
+                          <code>{children}</code>
+                        </pre>
+                      </div>
+                    );
+                  }
+                  return (
+                    <code className="bg-brand-violet/10 text-brand-violet px-1.5 py-0.5 rounded text-sm font-mono">
+                      {children}
+                    </code>
+                  );
+                },
+                table: ({ children }) => (
+                  <div className="my-6 overflow-x-auto rounded-xl border border-slate-200">
+                    <table className="w-full text-left">{children}</table>
+                  </div>
+                ),
+                thead: ({ children }) => (
+                  <thead className="bg-slate-50 border-b border-slate-200">{children}</thead>
+                ),
+                th: ({ children }) => (
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-700">{children}</th>
+                ),
+                td: ({ children }) => (
+                  <td className="px-4 py-3 text-sm text-slate-600 border-t border-slate-100">{children}</td>
+                ),
+                img: ({ src, alt }) => (
+                  <figure className="my-8">
+                    <img src={src} alt={alt || ''} className="w-full rounded-xl shadow-lg" />
+                    {alt && <figcaption className="mt-2 text-center text-sm text-slate-500">{alt}</figcaption>}
+                  </figure>
+                ),
+              }}
+            >
+              {jsonContent}
+            </ReactMarkdown>
           </motion.article>
         </div>
       </section>
