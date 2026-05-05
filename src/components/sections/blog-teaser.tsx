@@ -65,10 +65,20 @@ export default function BlogTeaser() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Gradient placeholder thumbnail */}
-              <div
-                className={`aspect-[16/9] bg-gradient-to-br ${gradientColors[post.category] || 'from-slate-100 to-slate-50'} transition-transform duration-500 group-hover:scale-[1.02]`}
-              />
+              {/* Thumbnail */}
+              {post.featuredImage && post.featuredImage.trim() !== '' ? (
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <img
+                    src={post.featuredImage}
+                    alt={post.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`aspect-[16/9] bg-gradient-to-br ${gradientColors[post.category] || 'from-slate-100 to-slate-50'} transition-transform duration-500 group-hover:scale-[1.02]`}
+                />
+              )}
 
               <div className="p-5">
                 {/* Category Tag */}
