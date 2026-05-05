@@ -57,8 +57,16 @@ export default function PortfolioPreview() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Gradient placeholder background */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-brand-violet/20 via-brand-cyan/10 to-brand-violet/5 transition-transform duration-500 group-hover:scale-[1.03]" />
+              {/* Background - Image or Gradient */}
+              {project.imageUrl && project.imageUrl.trim() !== '' ? (
+                <img
+                  src={project.imageUrl}
+                  alt={project.title}
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              ) : (
+                <div className="aspect-[4/3] bg-gradient-to-br from-brand-violet/20 via-brand-cyan/10 to-brand-violet/5 transition-transform duration-500 group-hover:scale-[1.03]" />
+              )}
 
               {/* Overlay content */}
               <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent p-6 transition-all duration-300 group-hover:from-black/75 group-hover:via-black/30">
@@ -69,10 +77,10 @@ export default function PortfolioPreview() {
                   {project.category}
                 </span>
 
-                <h3 className="font-heading text-lg font-bold text-white">
+                <h3 className="font-heading text-lg font-bold text-white drop-shadow-lg">
                   {project.title}
                 </h3>
-                <p className="text-sm text-white/70">{project.client}</p>
+                <p className="text-sm text-white/70 drop-shadow">{project.client}</p>
 
                 {/* Hidden details that show on hover */}
                 <p className="mt-2 max-h-0 overflow-hidden text-sm leading-relaxed text-white/60 opacity-0 transition-all duration-300 group-hover:max-h-20 group-hover:opacity-100 line-clamp-2">
